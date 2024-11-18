@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Gallery;
 use App\Models\Post;
 use App\Models\Tag;
 use App\Models\PostTag;
@@ -29,35 +30,55 @@ class PostController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'status' => 'required',
-            'category' => 'required',
-        ]);
+
+        if ($request->file('file')) {
+
+            $file = $request->file('file');
+            $fileName = rand(100, 10000) . time(). $file->getClientOriginalName();
+
+            $filePath = public_path('/storage/auth/posts/');
+
+            $file->move($filePath. $fileName);
+
+            $gallery = Gallery::create([
+                'image' => $fileName,
+                'type' => Gallery::POST_IMAGE,
+            ]);
+
+        }
 
         $post = Post::create([
-            'user_id' => 1,
+            'gallery_id' => $gallery->id,
+            'user_id' => auth()->id(),
             'title' => $request->title,
             'description' => $request->description,
             'status' => $request->status,
             'category_id' => $request->category,
         ]);
 
-        foreach ($request->tags as $tag) {
-            PostTag::create([
-                'tag_id' => $tag,
-                'post_id' => $post->id,
-            ]);
+        $validated = $request->validate([
+            'file' => 'required|mimes:jpg,png',
+            'title' => 'required',
+            'description' => 'required',
+            'status' => 'required',
+            'category' => 'required',
+        ]);
+
+
+        if ($request->has('tags')) {
+            foreach ($request->tags as $tag) {
+                PostTag::create([
+                    'tag_id' => $tag,
+                    'post_id' => $post->id,
+                ]);
+            }
         }
 
-
-        return  redirect()->route('dashboard')->with('success', 'Blog created successfully!');
+        return redirect()->route('dashboard')->with('success', 'Blog created successfully!');
     }
 
     public function show(Post $post)
     {
-        // dd($id);
         return view('posts.show', compact('post'));
     }
 
@@ -71,20 +92,8 @@ class PostController extends Controller
 
     public function update(Request $request, Post $post)
     {
-
-        if ($file = $request->file('file')) {
-            $fileName = rand(100, 100000) . time(). $file->getClientOriginalName();
-
-            $filePath = public_path('/storage/auth/posts');
-
-            $fileWithPath = $filePath. $fileName;
-
-            dd($fileWithPath);
-        }
-
-
         $post->update([
-            'user_id' => 1,
+            'user_id' => auth()->id(),
             'title' => $request->title,
             'description' => $request->description,
             'status' => $request->status,
@@ -99,7 +108,6 @@ class PostController extends Controller
                 'post_id' => $post->id,
             ]);
         }
-
 
         return redirect()->route('posts.index')->with('success', 'Post updated successfully!');
     }

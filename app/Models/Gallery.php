@@ -9,6 +9,9 @@ class Gallery extends Model
 {
     use HasFactory;
 
+    protected $table = 'gallery';
+
+
     public const POST_IMAGE = 1;
     protected $fillable = ['name','type'];
 }

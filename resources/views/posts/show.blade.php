@@ -21,13 +21,15 @@
                                 <h1 class="text-body">{!! $post->description !!}</h1>
                             </div>
 
+                            {{-- <div class="post-detail">
+                                <p>{{ $post->user->name  }}</p>
+                            </div> --}}
+
                             <div class="post-detail">
                                 <h6>{{ $post->category->name }}</h6>
                             </div>
 
-                            <div class="post-detail">
-                                <p>{{ $post->user->name }}</p>
-                            </div>
+
 
                             <div class="post-detail">
                                 <p>{{ $post->status === 1 ? 'Published' : 'Draft' }}</p>

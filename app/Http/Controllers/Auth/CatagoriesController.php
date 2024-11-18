@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\auth;
+namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
@@ -15,4 +15,6 @@ class CategoriesController extends Controller
         $posts = Post::all();
       return view('categories.index', compact('categories','posts'));
     }
+
+
 }
