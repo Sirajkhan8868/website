@@ -48,14 +48,14 @@
                                     </div>
 
                                     <h3 class="mt-3 mb-3"><a
-                                            href="https://blog.laravel.com/taylors-morning-routine-laravels-open-source-pledge">Accel
+                                            href="">Accel
                                             invests $57M into Laravel Products & Open-Source Framework</a></h3>
                                     <p class="mb-4">I believe that Laravel is the most productive way to build full-stack
                                         web
                                         applications, and Laravel Cloud will be the.
                                     </p>
 
-                                    <a href="https://blog.laravel.com/taylors-morning-routine-laravels-open-source-pledge"
+                                    <a href=""
                                         class="btn btn-small btn-main btn-round-full">Learn More</a>
                                 </div>
                             </div>

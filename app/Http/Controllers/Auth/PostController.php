@@ -10,6 +10,7 @@ use App\Models\Tag;
 use App\Models\PostTag;
 use Illuminate\Http\Request;
 use Auth;
+use GuzzleHttp\Psr7\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use str;
 
@@ -31,20 +32,25 @@ class PostController extends Controller
     public function store(Request $request)
     {
 
-        if ($request->file('file')) {
+        // if ($file = $request->file('file')) {
 
-            $file = $request->file('file');
-            $fileName = rand(100, 10000) . time(). $file->getClientOriginalName();
+        //     $fileName = rand(100, 10000) . time() . $file->getClientOriginalName();
 
-            $filePath = public_path('/storage/auth/posts/');
+        //     $filePath = public_path('/storage/auth/posts/');
 
-            $file->move($filePath. $fileName);
+        //     // $fileWithPath = $filePath. $fileName;
 
-            $gallery = Gallery::create([
-                'image' => $fileName,
-                'type' => Gallery::POST_IMAGE,
-            ]);
+        //     $file->move($filePath, $fileName);
 
+        //     $gallery = Gallery::create([
+        //         'image' => $fileName,
+        //         'type' => Gallery::POST_IMAGE
+        //     ]);
+
+        // }
+
+        if ($file = $request->file('file')) {
+            $gallery = $this->uploadFile($file);
         }
 
         $post = Post::create([
@@ -92,12 +98,48 @@ class PostController extends Controller
 
     public function update(Request $request, Post $post)
     {
-        $post->update([
-            'user_id' => auth()->id(),
-            'title' => $request->title,
-            'description' => $request->description,
-            'status' => $request->status,
-            'category_id' => $request->category,
+
+        // dd($post);
+        if ($file = $request->file('file')) {
+
+            //get the database
+            $imageName = $post->gallery->image;
+
+            $imagePath = public_path('/storage/auth/posts/');
+
+            if (file_exists($imageName . $imageName)) {
+                unlink($imageName . $imageName); //delete the image database
+            }
+
+           $this->uploadFile($file);
+            //update the images
+
+            $post->gallery->update([
+
+                'image' => ddd
+
+            ]);
+
+            $post->update([
+
+                'user_id' => auth()->id(),
+                'title' => $request->title,
+                'description' => $request->description,
+                'status' => $request->status,
+                'category_id' => $request->category,
+            ]);
+        } else {
+            dd('no');
+        }
+
+
+
+        $validated = $request->validate([
+            'file' => 'required|mimes:jpg,png',
+            'title' => 'required',
+            'description' => 'required',
+            'status' => 'required',
+            'category' => 'required',
         ]);
 
         PostTag::where('post_id', $post->id)->delete();
@@ -117,5 +159,28 @@ class PostController extends Controller
         $post->tags()->detach();
         $post->delete();
         return redirect()->route('posts.index')->with('success', 'Post deleted successfully!');
+    }
+
+    private function uploadFile($file)
+    {
+
+        $fileName = rand(100, 10000) . time() . $file->getClientOriginalName();
+
+        $filePath = public_path('/storage/auth/posts/');
+
+        // $fileWithPath = $filePath. $fileName;
+
+        $gallery = $file->move($filePath, $fileName);
+
+    }
+
+    private function storeImage($fileName)
+    {
+        $gallery = Gallery::create([
+            'image' => $fileName,
+            'type' => Gallery::POST_IMAGE
+        ]);
+
+        return $gallery;
     }
 }

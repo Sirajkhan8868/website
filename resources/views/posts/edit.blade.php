@@ -24,12 +24,12 @@
                         </div>
                     @endif
 
-                    <form method="post" action="{{ route('posts.update', $post->id) }}">
+                    <form method="post" action="{{ route('posts.update', $post->id) }}" enctype="multipart/form-data">
                         @csrf
                         @method('PATCH')
                         <div class="form-group">
                             <label>Title</label>
-                            <input type="text" name="title" value="{{ old('title', $post->title) }}"
+                            <input type="text" name="title" value="{{ old('title', $post->title)}}"
                                 class="form-control" autocomplete="off" placeholder="Title">
                         </div>
 
@@ -71,6 +71,12 @@
                                     @endforeach
                                 @endif
                             </select>
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <label>File</label>
+                            <input type="file" id="title" name="file" value="{{ old('file') }}"
+                                class="form-control">
                         </div>
 
 

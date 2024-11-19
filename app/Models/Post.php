@@ -10,7 +10,7 @@ class Post extends Model
     use HasFactory;
 
     protected $table = 'posts';
-    protected $fillable = ['gallery_id','user_id', 'category_id', 'title', 'description', 'status'];
+    protected $fillable = ['gallery_id', 'user_id', 'category_id', 'title', 'description', 'status'];
 
 
     public function tags()

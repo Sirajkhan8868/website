@@ -39,6 +39,7 @@
                         <table class="table" id="posts">
                             <thead>
                                 <tr>
+                                    <th scope="col">Image</th>
                                     <th scope="col">Title</th>
                                     <th scope="col">Description</th>
                                     <th scope="col">Category</th>
@@ -50,30 +51,28 @@
                             <tbody>
                                 @foreach ($posts as $post)
                                     <tr>
+                                        <td><img src="{{ asset('storage/auth/posts'). '/' .$post->gallery->image }}" alt="" style="width: 60px"></td>
                                         <td>{{ $post->title }}</td>
-                                        <td>{{ Str::limit($post->description, 15 ) }}</td>
+                                        <td>{{ Str::limit($post->description, 15, '--') }}</td>
                                         <td>{{ $post->category->name }}</td>
                                         <td>{{ $post->user->name }}</td>
-                                        <td>{{ $post->status == 1 ? 'Active' : 'Inactive' }}</td>
+                                        <td>{{ $post->status == 1 ? 'Active' : 'inActive' }}</td>
                                         <td id="outer">
-                                            <a href="{{ route('posts.show', $post->id) }}" class="btn btn-sm btn-success inner">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                            <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-sm btn-info inner">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                            <form method="post" action="{{ route('posts.destroy', $post->id) }}" class="inner" style="display:inline-block;">
+                                            <a href="{{ route('posts.show', $post->id) }}"
+                                                class="btn btn-sm btn-success inner"><i class="fas fa-eye"></i></a>
+                                            <a href="{{ route('posts.edit', $post->id) }}"
+                                                class="btn btn-sm btn-info inner"><i class="fas fa-edit"></i></a>
+                                            <form method="post" action="{{ route('posts.destroy', $post->id) }}"
+                                                class="inner">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
+                                                <button type="submit"> <a class="btn btn-sm btn-danger"><i
+                                                            class="fas fa-trash"></i></a></button>
                                             </form>
                                         </td>
                                     </tr>
                                 @endforeach
                             </tbody>
-
                         </table>
                     @else
                         <h3 class="text-center text-danger">No Post found..</h3>
