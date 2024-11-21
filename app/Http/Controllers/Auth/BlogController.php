@@ -13,8 +13,15 @@ class BlogController extends Controller
         $blogs = Post::all();
         return view('site.index',compact('blogs'));
     }
-    public function openSingleBlog()
-    {
-        return view('site.single');
+    public function openSingleBlog($id)
+{
+    $blog = Post::find($id);
+
+    if (! $blog) {
+        abort(404);
     }
+
+    return view('site.single', compact('blog'));
+}
+
 }

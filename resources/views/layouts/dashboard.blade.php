@@ -73,8 +73,9 @@
                     <a href="posts/{{ $post->id }}" class="p-2">
                         <div class="card card-hover mb-4 p-6 shadow-lg p-3 mb-5 bg-body rounded fs-1">
                             <div class="pb-5" style="cursor: pointer">
+                                <img src="{{ asset('storage/auth/posts') . '/' . $post->gallery->image }}" alt="{{ $post->title }}" style="width: 100%; height: auto; max-height: 500px; object-fit: cover;" class="mb-3">
                                 <h1>{{ $post->title }}</h1>
-                                <p>{!! $post->description !!}</p>
+                                <p>{!! Str::limit(strip_tags($post->description), 500) !!}</p>
                                 <p>{{ $post->category->name }}</p>
                                 <a href="#" onclick="goBack()" class="btn btn-secondary pt-2 mt-3 fw-bolder">Back to
                                     Blog</a>

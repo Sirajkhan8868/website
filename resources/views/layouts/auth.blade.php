@@ -67,7 +67,7 @@
                         <li class="active">
                             <a class="sidenav-item-link" href="{{ route('dashboard') }}">
                                 <i class="mdi mdi-briefcase-account-outline"></i>
-                                <span class="nav-text">Auth Dashboard</span>
+                                <span class="nav-text">Dashboard</span>
                             </a>
                         </li>
 

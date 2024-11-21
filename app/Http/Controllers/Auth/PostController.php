@@ -50,7 +50,10 @@ class PostController extends Controller
         // }
 
         if ($file = $request->file('file')) {
-            $gallery = $this->uploadFile($file);
+
+            $fileName = $this->uploadFile($file);
+
+            $gallery = $this->storeImage($fileName);
         }
 
         $post = Post::create([
@@ -99,40 +102,35 @@ class PostController extends Controller
     public function update(Request $request, Post $post)
     {
 
-        // dd($post);
         if ($file = $request->file('file')) {
 
-            //get the database
-            $imageName = $post->gallery->image;
+            $imageName = null;
 
-            $imagePath = public_path('/storage/auth/posts/');
+            if ($post->gallery) {
+                $imageName = $post->gallery->image;
+                $imagePath = public_path('/storage/auth/posts/');
 
-            if (file_exists($imageName . $imageName)) {
-                unlink($imageName . $imageName); //delete the image database
+                if (file_exists($imageName . $imageName)) {
+                    unlink($imageName . $imageName); //delete the image database
+                }
             }
-
-           $this->uploadFile($file);
+            $fileName = $this->uploadFile($file);
             //update the images
-
             $post->gallery->update([
 
-                'image' => ddd
+                'image' => $fileName
 
             ]);
-
-            $post->update([
-
-                'user_id' => auth()->id(),
-                'title' => $request->title,
-                'description' => $request->description,
-                'status' => $request->status,
-                'category_id' => $request->category,
-            ]);
-        } else {
-            dd('no');
         }
 
+        $post->update([
 
+            'user_id' => auth()->id(),
+            'title' => $request->title,
+            'description' => $request->description,
+            'status' => $request->status,
+            'category_id' => $request->category,
+        ]);
 
         $validated = $request->validate([
             'file' => 'required|mimes:jpg,png',
@@ -170,8 +168,9 @@ class PostController extends Controller
 
         // $fileWithPath = $filePath. $fileName;
 
-        $gallery = $file->move($filePath, $fileName);
+        $file->move($filePath, $fileName);
 
+        return $fileName;
     }
 
     private function storeImage($fileName)
