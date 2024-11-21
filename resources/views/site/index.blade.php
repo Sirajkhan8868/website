@@ -50,12 +50,12 @@
                                     </div>
 
                                     <h3 class="mt-3 mb-3">
-                                        <a href="{{ route('single-blog', $blog->id) }}">
+                                        <a href="{{ route('blog-single', $blog->id) }}">
                                             {{ $blog->title ?? 'No Title Available' }}
                                         </a>
                                     </h3>
                                     <p class="mb-4">{{ Str::limit(strip_tags($blog->description), 200) }}</p>
-                                    <a href="{{ route('single-blog', $blog->id) }}" class="btn btn-small btn-main btn-round-full">Learn More</a>
+                                    <a href="{{ route('blog-single', $blog->id) }}" class="btn btn-small btn-main btn-round-full">Learn More</a>
                                 </div>
 
                             </div>
