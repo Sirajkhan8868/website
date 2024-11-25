@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Comment;
+
 use App\Models\Post;
 use Illuminate\Http\Request;
 
@@ -21,7 +23,9 @@ class BlogController extends Controller
         abort(404);
     }
 
-    return view('site.single', compact('blog'));
+    $comments = Comment::where('post_id', $blog->id)->get();
+
+    return view('site.single', compact('blog','comments'));
 }
 
 }

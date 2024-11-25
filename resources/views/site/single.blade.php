@@ -64,9 +64,8 @@
                                 </div>
                             </div>
 
-
-
                             <div class="col-lg-12 mb-5">
+
                                 @if ($errors->any())
                                     <div>
                                         <ul>
@@ -78,15 +77,16 @@
                                 @endif
 
                                 @if (Session::has('alert-success'))
-                                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                    <strong>Success</strong>{{Session::get('alert-success')}}
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <strong>Success</strong>{{ Session::get('alert-success') }}
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
                                 @endif
 
                             </div>
+
 
                             <div class="col-lg-12 mb-5">
                                 <form method="post" action="{{ route('post.comment', $blog->id) }}">
@@ -101,86 +101,53 @@
                                 </form>
                             </div>
 
-                                {{-- //comment add  --}}
+
+                         {{--  comment start --}}
 
 
 
+                            @if (count($comments) > 0)
                                 <div class="col-lg-12 mb-5">
                                     <div class="comment-area card border-0 p-5">
-                                        <h4 class="mb-4"></h4>
+                                        <h4 class="mb-4">{{ count($comments) }} Comments</h4>
                                         <ul class="comment-tree list-unstyled">
 
-                                           <li class="mb-5">
-                                            <div class="comment-area-box">
-                                                <img loading="lazy" alt="comment-author" src="{{ asset('assets/site/images/blog/test1.jpg') }}" class="img-fluid float-left mr-3 mt-2">
+                                            @foreach ($comments as $comment)
+                                                <li class="mb-5">
+                                                    <div class="comment-area-box">
+                                                        <img loading="lazy" alt="comment-author"
+                                                            src="{{ asset('assets/site/images/blog/test1.jpg') }}"
+                                                            class="img-fluid float-left mr-3 mt-2">
 
-                                                <h5 class="mb-1"></h5>
-                                                <span>United Kingdom</span>
+                                                        <h5 class="mb-1">{{ $comment->user ?  $comment->user->name: '' }}</h5>
+                                                        <span>{{ $comment->user ? $comment->user->email: '' }}</span>
 
-                                                <div class="comment-meta mt-4 mt-lg-0 mt-md-0 float-lg-right float-md-right">
-                                                    <a href="#"><i class="icofont-reply mr-2 text-muted"></i>Reply |</a>
-                                                    <span class="date-comm">Posted October 7, 2018 </span>
-                                                </div>
+                                                        <div
+                                                            class="comment-meta mt-4 mt-lg-0 mt-md-0 float-lg-right float-md-right">
+                                                            <a href="javascript:void(0)" id="reply-btn"><i class="icofont-reply mr-2 text-muted"></i>Reply |</a>
+                                                            <span class="date-comm">Posted {{ $comment->user ? date('M d D Y', strtotime($comment->user->created_at)) : '' }} </span>
+                                                        </div>
 
-                                                <div class="comment-content mt-3">
-                                                    <p>Some consultants are employed indirectly by the client via a consultancy staffing company, a company that provides consultants on an agency basis. </p>
-                                                </div>
+                                                        <div class="comment-content mt-3">
+                                                            <p>{{ $comment ? $comment->comment: '' }}</p>
+                                                        </div>
 
-                                                <div class="form-group">
-                                                    <textarea name="comment" id="comment" class="form-control" cols="20" rows="3" placeholder="Enter your here..."></textarea>
-                                                    <button type="submit" class="btn btn-sm btn-info mt-2" style="float: right"><strong>Reply</strong></button>
-                                                </div>
-                                            </div>
-                                        </li>
-
+                                                        <div class="form-group comment-reply-div" >
+                                                            <textarea name="comment" id="comment" class="form-control" cols="20" rows="3"
+                                                                placeholder="Enter your here..." ></textarea>
+                                                            <button type="submit" class="btn btn-sm btn-info mt-2"
+                                                                style="float: right"><strong>Reply</strong></button>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            @endforeach
 
                                         </ul>
                                     </div>
                                 </div>
+                            @endif
 
-
-                               {{-- comment end --}}
-
-
-
-                                {{-- @if (count($comments) > 0)
-                                <div class="col-lg-12 mb-5">
-                                    <div class="comment-area card border-0 p-5">
-                                        <h4 class="mb-4">{{ route($comment) }}</h4>
-                                        <ul class="comment-tree list-unstyled">
-                                           @foreach ($comments as $comment)
-
-                                           <li class="mb-5">
-                                            <div class="comment-area-box">
-                                                <img loading="lazy" alt="comment-author" src="{{ asset('assets/site/images/blog/test1.jpg') }}" class="img-fluid float-left mr-3 mt-2">
-
-                                                <h5 class="mb-1">{{ $comment->user->name }}</h5>
-                                                <span>United Kingdom</span>
-
-                                                <div class="comment-meta mt-4 mt-lg-0 mt-md-0 float-lg-right float-md-right">
-                                                    <a href="#"><i class="icofont-reply mr-2 text-muted"></i>Reply |</a>
-                                                    <span class="date-comm">Posted October 7, 2018 </span>
-                                                </div>
-
-                                                <div class="comment-content mt-3">
-                                                    <p>Some consultants are employed indirectly by the client via a consultancy staffing company, a company that provides consultants on an agency basis. </p>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <textarea name="comment" id="comment" class="form-control" cols="20" rows="3" placeholder="Enter your here..."></textarea>
-                                                    <button type="submit" class="btn btn-sm btn-info mt-2" style="float: right"><strong>Reply</strong></button>
-                                                </div>
-                                            </div>
-                                        </li>
-
-                                           @endforeach
-                                        </ul>
-                                    </div>
-                                </div>
-                            @endif --}}
-
-
-                               {{-- comment end  --}}
+                            {{-- comment --}}
 
                         </div>
                     </div>
@@ -272,5 +239,21 @@
         <h3 class="text-danger text-center mt-5">Unable to locate the blog, please go back and try again.</h3>
 
     @endif
+
+@endsection
+
+
+@section('scripts')
+
+   <script>
+    $('.comment-reply-div').hide;
+    $(document).ready(function()
+    {
+       $(this).click(function()
+       {
+        $('.comment-reply-div').show;
+       });
+    });
+   </script>
 
 @endsection

@@ -159,7 +159,6 @@
 </div>
 
 
-
 <script src="{{asset('assets/site/plugins/jquery/jquery.min.js')}}"></script>
 
 <script src="{{asset('assets/site/plugins/bootstrap/bootstrap.min.js')}}"></script>
@@ -173,6 +172,10 @@
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcABaamniA6OL5YvYSpB3pFMNrXwXnLwU" defer></script>
 <script src="{{asset('assets/site/plugins/google-map/map.js')}}" defer></script>
+
+
+@yield('scripts')
+
 
 <script src="{{asset('assets/site/js/script.js')}}"></script>
 

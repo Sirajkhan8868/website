@@ -27,7 +27,7 @@ class CommentController extends Controller
                 'comment' => $request->comment
             ]);
 
-            $request->session()->flash('alert-success', 'Comment  added successfully, it will be visible le after admin approval');
+            $request->session()->flash('alert-success',' Comment  added successfully, it will be visible le after admin approval');
         }
         return back();
     }

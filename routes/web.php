@@ -30,20 +30,16 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
-Route::resource('posts', PostController::class);
-Route::get('/posts/{id}', [PostController::class, 'show'])->name('posts.show');
-Route::post('/posts/store', [PostController::class, 'store'])->name('posts.store');
+Route::resource('auth/posts', PostController::class);
 Route::get('auth/categories', [CategoriesController::class, 'OpenCategoriesPage'])->name('auth.categories');
-// Route::get('auth/categories', [CategoriesController::class, 'OpenCategoriesPage'])->name('auth.categories');
-
-
+// Route::get('auth/tags', [TagController::class, 'OpenTagPage'])->name('auth.tags');
 
 
 Route::get('/',[BlogController::class,'index'])->name('home');
-Route::get('single-blog/{id}', [BlogController::class, 'openSingleBlog'])->name('blog-single');
+Route::get('single-blog/{id}', [BlogController::class, 'openSingleBlog'])->name('single-blog');
 
 Route::post('post/comment/{postId}', [CommentController::class, 'postComment'])->name('post.comment')->middleware('auth');
-Route::post('comment/reply/{commentId}', [CommentController::class, 'replyToComment'])->name('comment.reply');
+Route::post('comment/reply/{commentId}', [CommentController::class, 'postComment'])->name('comment.reply');
 
 
 

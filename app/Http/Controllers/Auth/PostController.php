@@ -32,23 +32,6 @@ class PostController extends Controller
     public function store(Request $request)
     {
 
-        // if ($file = $request->file('file')) {
-
-        //     $fileName = rand(100, 10000) . time() . $file->getClientOriginalName();
-
-        //     $filePath = public_path('/storage/auth/posts/');
-
-        //     // $fileWithPath = $filePath. $fileName;
-
-        //     $file->move($filePath, $fileName);
-
-        //     $gallery = Gallery::create([
-        //         'image' => $fileName,
-        //         'type' => Gallery::POST_IMAGE
-        //     ]);
-
-        // }
-
         if ($file = $request->file('file')) {
 
             $fileName = $this->uploadFile($file);
