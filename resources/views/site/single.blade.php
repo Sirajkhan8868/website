@@ -2,6 +2,10 @@
 
 @section('title', 'single blog')
 
+@section('styles')
+
+@endsection
+
 @section('content')
 
 
@@ -39,27 +43,26 @@
                                             <span class="text-black text-capitalize mr-3"><i class="ti-time mr-1"></i>
                                                 {{ date('d-M-Y', strtotime($blog->created_at)) }}</span>
 
-                                            <span class="text-muted text-capitalize mr-3"><i class="ti-comment mr-2"></i>5
-                                                Comments</span>
+                                            <span class="text-muted text-capitalize mr-3"><i class="ti-comment mr-2"></i>
+                                                {{ count($comments) }}</span>
                                         </div>
 
                                         <h2 class="mt-3 mb-4">{{ $blog->title }}</h2>
-                                        <p class="lead mb-4">{{ strip_tags($blog->description) }}</p>
+                                        <p class="lead mb-4">{{ Str::limit($blog->description, 700) }}</p>
 
 
                                         <div
                                             class="tag-option mt-5 d-block d-md-flex justify-content-between align-items-center">
-                                            <ul class="list-inline">
-                                                <li>Tags:</li>
+                                            <ul class="list-inline mb-0">
+                                                <li class="list-inline-item font-weight-bold">Tags:</li>
                                                 @foreach ($blog->tags as $tag)
-                                                    <li class="list-inline-item"><a href="#"
-                                                            rel="tag">{{ $tag->name }}</a></li>
+                                                    <li class="list-inline-item">
+                                                        <a>{{ $tag->name }}</a>
+                                                    </li>
                                                 @endforeach
-
                                             </ul>
-
-
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -102,12 +105,12 @@
                             </div>
 
 
-                         {{--  comment start --}}
+                            {{--  comment start --}}
 
 
 
                             @if (count($comments) > 0)
-                                <div class="col-lg-12 mb-5">
+                                <div class="col-lg-12 mb-5" id="#comment-section">
                                     <div class="comment-area card border-0 p-5">
                                         <h4 class="mb-4">{{ count($comments) }} Comments</h4>
                                         <ul class="comment-tree list-unstyled">
@@ -119,25 +122,65 @@
                                                             src="{{ asset('assets/site/images/blog/test1.jpg') }}"
                                                             class="img-fluid float-left mr-3 mt-2">
 
-                                                        <h5 class="mb-1">{{ $comment->user ?  $comment->user->name: '' }}</h5>
-                                                        <span>{{ $comment->user ? $comment->user->email: '' }}</span>
+                                                        <h5 class="mb-1">{{ $comment->user ? $comment->user->name : '' }}
+                                                        </h5>
+                                                        <span>{{ $comment->user ? $comment->user->email : '' }}</span>
 
                                                         <div
                                                             class="comment-meta mt-4 mt-lg-0 mt-md-0 float-lg-right float-md-right">
-                                                            <a href="javascript:void(0)" id="reply-btn"><i class="icofont-reply mr-2 text-muted"></i>Reply |</a>
-                                                            <span class="date-comm">Posted {{ $comment->user ? date('M d D Y', strtotime($comment->user->created_at)) : '' }} </span>
+                                                            <span class="date-comm">Posted
+                                                                {{ $comment->user ? date('M d D Y', strtotime($comment->user->created_at)) : '' }}
+                                                            </span>
                                                         </div>
 
                                                         <div class="comment-content mt-3">
-                                                            <p>{{ $comment ? $comment->comment: '' }}</p>
+                                                            <p>{{ $comment ? $comment->comment : '' }}</p>
                                                         </div>
 
-                                                        <div class="form-group comment-reply-div" >
-                                                            <textarea name="comment" id="comment" class="form-control" cols="20" rows="3"
-                                                                placeholder="Enter your here..." ></textarea>
-                                                            <button type="submit" class="btn btn-sm btn-info mt-2"
-                                                                style="float: right"><strong>Reply</strong></button>
+                                                        {{-- delete --}}
+
+                                                        <div class="mt-3">
+                                                            @if ($comment->commentReplies)
+                                                                @foreach ($comment->commentReplies as $reply)
+                                                                    <form method="POST"
+                                                                        action="{{ route('comment.reply.delete') }}">
+                                                                        @csrf
+                                                                        @method('DELETE')
+                                                                        <input type="hidden" name="reply_id"
+                                                                            value="{{ $reply->id }}">
+                                                                        <div
+                                                                            class="comment-meta mt-lg-0 mt-md-0 float-lg-right float-md-right bg-danger">
+                                                                            <span class="date-comm"><button type="submit"
+                                                                                    class="bg-danger"
+                                                                                    style="pt-1"><i
+                                                                                        class="fas fa-trash text-white  btn-sm"></i></button>
+                                                                            </span>
+                                                                        </div>
+                                                                    </form>
+
+                                                                    <div class="comment-content mt-3">
+                                                                        <p>{{ $reply->comment }}</p>
+                                                                    </div>
+                                                                @endforeach
+                                                            @endif
                                                         </div>
+
+
+                                                        <span class="show-reply" style="float: right; cursor: pointer;">Show
+                                                            reply</span>
+
+                                                        <div class="form-group comment-reply-div">
+                                                            <form method="POST"
+                                                                action="{{ route('comment.reply', $comment->id) }}">
+                                                                @csrf
+                                                                <textarea name="comment" id="comment" class="form-control" cols="20" rows="3"
+                                                                    placeholder="Enter your comment here..."></textarea>
+                                                                <button id="reply-btn" type="submit"
+                                                                    class="btn btn-sm btn-info mt-2"
+                                                                    style="float: right"><strong>Reply</strong></button>
+                                                            </form>
+                                                        </div>
+
                                                     </div>
                                                 </li>
                                             @endforeach
@@ -145,91 +188,69 @@
                                         </ul>
                                     </div>
                                 </div>
+
+
+
                             @endif
+
+                            <div class="col-md-12 mt-3">
+                                <span>{{ $comments->links() }}</span>
+                            </div>
 
                             {{-- comment --}}
 
                         </div>
                     </div>
 
+                    {{-- posts --}}
+
                     <div class="col-lg-4 mt-5 mt-lg-0">
-                        <div class="sidebar-wrap">
-                            <div class="sidebar-widget search card p-4 mb-3 border-0">
-                                <input type="text" class="form-control" placeholder="search">
-                                <a href="#" class="btn btn-mian btn-small d-block mt-2">search</a>
+
+                        @if (count($latestPosts) > 0)
+
+                            <div class="sidebar-widget latest-post card border-0 p-4 mb-3">
+                                <h5>Latest Posts</h5>
+
+                                @foreach ($latestPosts as $post)
+                                    <div class="media border-bottom py-3">
+                                        <a href="{{ route('single-blog', $post->id) }}">
+                                            <img loading="lazy"
+                                                src="{{ asset('storage/auth/posts/' . $blog->gallery->image) }}"
+                                                alt="blog" style="width: 150px; padding: 10px 20px"></a>
+
+                                        <div class="media-body">
+                                            <h6 class="my-2"><a
+                                                    href="{{ route('single-blog', $post->id) }}">{{ $post->title }}</a>
+                                            </h6>
+                                            <span
+                                                class="text-sm text-muted">{{ date('d M Y', strtotime($post->created_at)) }}</span>
+                                        </div>
+                                    </div>
+                                @endforeach
                             </div>
 
-                            {{-- <div class="sidebar-widget card border-0 mb-3">
-                        <img loading="lazy" src="{{ asset('assets/site/images/blog/4.jpg') }}" alt="blog-author" class="img-fluid">
-                        <div class="card-body p-4 text-center">
-                            <h5 class="mb-0 mt-4">Arther Conal</h5>
-                            <p>Digital Marketer</p>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt, dolore.</p>
+                        @endif
 
-                            <ul class="list-inline author-socials">
-                                <li class="list-inline-item mr-3">
-                                    <a href="#"><i class="fab fa-facebook-f text-muted"></i></a>
-                                </li>
-                                <li class="list-inline-item mr-3">
-                                    <a href="#"><i class="fab fa-twitter text-muted"></i></a>
-                                </li>
-                                <li class="list-inline-item mr-3">
-                                    <a href="#"><i class="fab fa-linkedin-in text-muted"></i></a>
-                                </li>
-                                <li class="list-inline-item mr-3">
-                                    <a href="#"><i class="fab fa-pinterest text-muted"></i></a>
-                                </li>
-                                <li class="list-inline-item mr-3">
-                                    <a href="#"><i class="fab fa-behance text-muted"></i></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div> --}}
 
-                            {{-- <div class="sidebar-widget latest-post card border-0 p-4 mb-3">
-                        <h5>Latest Posts</h5>
+                        {{-- <div class="sidebar-widget bg-white rounded tags p-4 mb-3">
+                            <h5 class="mb-4">Tags</h5>
+                            @if (count($tag) > 0)
 
-                        <div class="media border-bottom py-3">
-                            <a href="#"><img loading="lazy" class="mr-4" src="{{ asset('assets/site/images/blog/bt-3.jpg') }}"
-                                    alt="blog"></a>
-                            <div class="media-body">
-                                <h6 class="my-2"><a href="#">Thoughtful living in los Angeles</a></h6>
-                                <span class="text-sm text-muted">03 Mar 2018</span>
-                            </div>
-                        </div>
+                            @foreach ($tags as $tag)
 
-                        <div class="media border-bottom py-3">
-                            <a href="#"><img loading="lazy" class="mr-4" src="{{ asset('assets/site/images/blog/bt-2.jpg') }}"
-                                    alt="blog"></a>
-                            <div class="media-body">
-                                <h6 class="my-2"><a href="#">Vivamus molestie gravida turpis.</a></h6>
-                                <span class="text-sm text-muted">03 Mar 2018</span>
-                            </div>
-                        </div>
+                            <a>{{ $tag->name }}</a>
 
-                        <div class="media py-3">
-                            <a href="#"><img loading="lazy" class="mr-4" src="{{ asset('assets/site/images/blog/bt-1.jpg') }}"
-                                    alt="blog"></a>
-                            <div class="media-body">
-                                <h6 class="my-2"><a href="#">Fusce lobortis lorem at ipsum semper sagittis</a>
-                                </h6>
-                                <span class="text-sm text-muted">03 Mar 2018</span>
-                            </div>
-                        </div>
-                    </div> --}}
 
-                            <div class="sidebar-widget bg-white rounded tags p-4 mb-3">
-                                <h5 class="mb-4">Tags</h5>
+                            @endforeach
+                            @endif
+                            <h6 class="text-center text-danger">No Tag found</h6>
+                        </div> --}}
 
-                                <a href="#">Web</a>
-                                <a href="#">agency</a>
-                                <a href="#">company</a>
-                                <a href="#">creative</a>
-                                <a href="#">html</a>
-                                <a href="#">Marketing</a>
-                                <a href="#">Social Media</a>
-                                <a href="#">Branding</a>
-                            </div>
+                        <div class="sidebar-widget bg-white rounded tags p-4 mb-3">
+                            <h5 class="mb-4">Tags</h5>
+
+                            <a>web</a>
+
                         </div>
                     </div>
                 </div>
@@ -244,16 +265,16 @@
 
 
 @section('scripts')
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="" crossorigin="anonymous"></script>
 
-   <script>
-    $('.comment-reply-div').hide;
-    $(document).ready(function()
-    {
-       $(this).click(function()
-       {
-        $('.comment-reply-div').show;
-       });
-    });
-   </script>
+    <script>
+        $('.comment-reply-div').hide();
+        $(document).ready(function() {
 
+            $('.show-reply').on('click', function() {
+                $(this).siblings('.comment-reply-div').toggle('swing')
+                $('.comment-reply-div').show();
+            });
+        });
+    </script>
 @endsection

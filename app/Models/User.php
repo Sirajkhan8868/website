@@ -21,7 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'is_admin' => 1
+        'is_admin',
     ];
 
     /**

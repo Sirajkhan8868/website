@@ -2,13 +2,9 @@
 
 @section('title', 'Blog Page')
 
-@section('styles')
-
-
-@endsection
-
-
 @section('content')
+
+
 
     <section class="page-title bg-1">
         <div class="container">
@@ -39,11 +35,9 @@
                                 <div class="blog-item-content bg-white p-5">
                                     <div class="blog-item-meta bg-gray pt-2 pb-1 px-3">
                                         <span class="text-muted text-capitalize d-inline-block mr-3">
-                                            <i class="ti-pencil-alt mr-2"></i>Creativity
+                                            <i class="ti-comment mr-2"></i>{{ count($blog->comments ? $blog->comments : []) }}
                                         </span>
-                                        <span class="text-muted text-capitalize d-inline-block mr-3">
-                                            <i class="ti-comment mr-2"></i>5 Comments
-                                        </span>
+
                                         <span class="text-black text-capitalize d-inline-block mr-3">
                                             <i class="ti-time mr-1"></i> {{ date('d-M-Y', strtotime($blog->created_at)) }}
                                         </span>
@@ -63,16 +57,8 @@
                     @endforeach
                 </div>
                 <div class="row justify-content-center mt-5">
-                    <div class="col-lg-6 text-center">
-                        <nav class="navigation pagination d-inline-block">
-                            <div class="nav-links">
-                                <a class="prev page-numbers" href="#">Prev</a>
-                                <span aria-current="page" class="page-numbers current">1</span>
-                                <a class="page-numbers" href="#">2</a>
-                                <a class="next page-numbers" href="#">Next</a>
-                            </div>
-                        </nav>
-                    </div>
+
+                    {{ $blogs->links() }}
                 </div>
             @else
                 <div class="text-center">

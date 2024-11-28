@@ -14,7 +14,6 @@ class Gallery extends Model
 
     public const POST_IMAGE = 1;
 
-
     protected $fillable = ['image', 'type'];
 
 }

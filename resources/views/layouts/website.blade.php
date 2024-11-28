@@ -74,7 +74,7 @@
                 <li class="nav-item @@home">
                   <a class="nav-link" href="{{ url('/') }}">Home</a>
                 </li>
-                <li class="nav-item @@contact"><a class="nav-link" href="{{route('login')}}contact.html">Login</a></li>
+                <li class="nav-item @@contact"><a class="nav-link" href="{{route('login')}}">Login</a></li>
                 <li class="nav-item @@contact"><a class="nav-link" href="{{route('register')}}">Register</a></li>
               </ul>
 
