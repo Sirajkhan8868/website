@@ -220,6 +220,17 @@
         <script src="{{ asset('assets/auth/js/mono.js') }}"></script>
         <script src="{{ asset('assets/auth/js/custom.js') }}"></script>
         @yield('scripts')
+
+        <script>
+            $(document).ready(function()
+            {
+              $('#logout-button').click(function()
+              {
+                $('#logout-form').submit();
+              }
+               );
+            });
+        </script>
 </body>
 
 </html>

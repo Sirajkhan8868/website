@@ -14,12 +14,11 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="block text-center">
-                        <span class="text-white">News details</span>
                         <h1 class="text-capitalize mb-4 text-lg">Blog Single</h1>
                         <ul class="list-inline">
                             <li class="list-inline-item"><a href="{{ url('/') }}" class="text-white">Home</a></li>
                             <li class="list-inline-item"><span class="text-white">/</span></li>
-                            <li class="list-inline-item text-white-50">News details</li>
+                            <li class="list-inline-item text-white-50">Blog details</li>
                         </ul>
                     </div>
                 </div>
@@ -119,8 +118,9 @@
                                                 <li class="mb-5">
                                                     <div class="comment-area-box">
                                                         <img loading="lazy" alt="comment-author"
-                                                            src="{{ asset('assets/site/images/blog/test1.jpg') }}"
+                                                            src="{{ asset('assets/site/images/user/profile.png') }}" style="width: 40px"
                                                             class="img-fluid float-left mr-3 mt-2">
+
 
                                                         <h5 class="mb-1">{{ $comment->user ? $comment->user->name : '' }}
                                                         </h5>
@@ -129,7 +129,7 @@
                                                         <div
                                                             class="comment-meta mt-4 mt-lg-0 mt-md-0 float-lg-right float-md-right">
                                                             <span class="date-comm">Posted
-                                                                {{ $comment->user ? date('M d D Y', strtotime($comment->user->created_at)) : '' }}
+                                                                {{ $comment->user ? date('M d D Y', strtotime($comment->created_at)) : '' }}
                                                             </span>
                                                         </div>
 

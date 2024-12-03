@@ -12,7 +12,7 @@ class BlogController extends Controller
 {
     public function index()
     {
-        $blogs = Post::SimplePaginate(4);
+        $blogs = Post::where('status', Post::PUBLISHED)->SimplePaginate(4);
         return view('site.index',compact('blogs'));
     }
     public function openSingleBlog($id)
@@ -22,8 +22,7 @@ class BlogController extends Controller
     if (! $blog) {
     }
 
-    $comments = Comment::where('post_id', $blog->id)->SimplePaginate(2);
-    // $comments = Comment::where('post_id', $blog->id)->get();
+    $comments = Comment::where('post_id', $blog->id)->SimplePaginate(5);
     $latestPosts = Post::latest()->take(1)->get();
     $tags = $blog->tags;
     return view('site.single', compact('blog','comments','latestPosts','tags'));
